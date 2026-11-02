@@ -15,8 +15,7 @@ import {RoomNetwork} from './network.js';
 const $=s=>document.querySelector(s),all=s=>[...document.querySelectorAll(s)],esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function read(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}function save(key,v){try{localStorage.setItem(key,JSON.stringify(v))}catch{}}
 const prefs=read('chair-preferences',{sound:true,quality:'balanced',reducedMotion:matchMedia('(prefers-reduced-motion:reduce)').matches,character:0});let selected=Math.max(0,Math.min(CHARACTERS.length-1,prefs.character||0)),world,state,previous,mode='home',paused=false,accumulator=0,last=performance.now(),eventSerial=0,hudAt=0,roundId='',guestStateAt=0,guestFrameMs=125,toastTimer,menuDemoAt=0,endedShown=false,comebackPreviewAt=0;
-if(!prefs.caricatureVersion){selected=4;prefs.caricatureVersion=1}
-selected=Math.min(selected,CHARACTERS.length-1);if(!prefs.phoneVisualV2&&matchMedia('(pointer:coarse)').matches){if(prefs.quality==='performance')prefs.quality='balanced';prefs.phoneVisualV2=true;save('chair-preferences',prefs)}
+selected=Math.min(selected,CHARACTERS.length-1);prefs.character=selected;if(!prefs.phoneVisualV2&&matchMedia('(pointer:coarse)').matches){if(prefs.quality==='performance')prefs.quality='balanced';prefs.phoneVisualV2=true;save('chair-preferences',prefs)}
 prefs.camera=prefs.camera==='overhead'?'overhead':'chase';
 let selectedMap=getMap(new URLSearchParams(location.search).get('map')||read('chair-map','skyline')).id;
 let selectedMode=getMode(new URLSearchParams(location.search).get('mode')||read('chair-mode','rooftop')).id;
@@ -27,7 +26,7 @@ function toast(message){$('#toast').textContent=message;$('#toast').classList.ad
 function closeDialogs(){for(const d of all('dialog[open]'))d.close()}
 function showDialog(id){const d=$(id);if(!d.open)d.showModal();keys.clear();touch.fire=touch.boost=false}
 function updateCharacterPicker(){all('.character').forEach(b=>b.setAttribute('aria-pressed',Number(b.dataset.character)===selected?'true':'false'));$('#picked-name').textContent=CHARACTERS[selected].name+' · Preview ↗';prefs.character=selected;save('chair-preferences',prefs)}
-$('#characters').innerHTML=[0,1,2,3,4].map(i=>{const c=CHARACTERS[i];return `<button class="character ${c.parody?'parody-character':''}" data-character="${i}" aria-pressed="${i===selected}" aria-label="${c.name}${c.parody?' · original parody caricature':''}"><span>${c.portrait?`<img src="${c.portrait}" alt="" width="42" height="42">`:c.emoji}</span><small>${c.name}</small></button>`}).join('');updateCharacterPicker();
+$('#characters').innerHTML=[0,1,2,3].map(i=>{const c=CHARACTERS[i];return `<button class="character" data-character="${i}" aria-pressed="${i===selected}" aria-label="${c.name}"><span>${c.emoji}</span><small>${c.name}</small></button>`}).join('');updateCharacterPicker();
 all('.character').forEach(b=>b.addEventListener('click',()=>{selected=Number(b.dataset.character);updateCharacterPicker();const chars=[selected,...CHARACTERS.map((_,i)=>i).filter(i=>i!==selected)];state=createMatch({mapId:'preview',modeId:'rooftop',characters:chars,humans:[],seed:41});previous=structuredClone(state);eventSerial=0;sound('select')}));
 function newDemo(){state=createMatch({mapId:'preview',modeId:'rooftop',characters:[selected,...CHARACTERS.map((_,i)=>i).filter(i=>i!==selected)],humans:[],seed:41});state.countdown=0;previous=structuredClone(state);eventSerial=0;menuDemoAt=performance.now()}
 function menu(){closeComebackPreview();closeDialogs();mode='home';paused=false;endedShown=false;$('#hud').hidden=true;$('#home').hidden=false;document.body.classList.remove('playing');$('#room-dialog').dataset.match='';keys.clear();newDemo();syncCameraUI();syncMapUI();syncModeUI()}
@@ -50,11 +49,10 @@ function comebackFrame(now){
  $('#comeback-card').setAttribute('aria-label','Character comeback animation');
  $('#comeback-close').hidden=!preview;$('#comeback-count').hidden=false;$('#comeback-count').textContent=beat.count;
  $('#comeback-label').textContent=preview?'MEET YOUR COMEBACK':'BACK IN '+beat.count+' SECOND'+(beat.count>1?'S':'');
- $('#comeback-name').textContent=CHARACTERS[character].name+(CHARACTERS[character].parody?' · Original parody':'');
- $('#comeback-caption').textContent=character===4?beat.phase:time<2.75?'CHAIR OUT. REPLACEMENT ON THE WAY.':'NEW CHAIR. BACK TO BUSINESS.';
+ $('#comeback-name').textContent=CHARACTERS[character].name;
+ $('#comeback-caption').textContent=time<2.75?'CHAIR OUT. REPLACEMENT ON THE WAY.':'NEW CHAIR. BACK TO BUSINESS.';
  $('#comeback-progress').parentElement.hidden=false;$('#comeback-progress').style.width=beat.progress*100+'%';
  $('#comeback-note').textContent=preview?'A four-second comeback. Original animation preview.':'The match keeps going. You return automatically.';
- $('#parody-notice').hidden=!CHARACTERS[character].parody;
  return{rect:$('#comeback-stage').getBoundingClientRect(),time,character};
 }
 
