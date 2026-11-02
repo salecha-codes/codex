@@ -80,7 +80,7 @@ Skyline Penthouse, Biophilic Oasis, Neo-Cyber Tech Arena, Vintage Industrial Lof
 and Urban Penthouse · Open Floor. The latter reserves an 82 × 54-unit open center.
 Existing maps, modes, controls and art are retained from the current game source.
 
-The four playable characters are Mango, Puddles, Pickle and Bandit. The Boss and Modi ji characters have been removed. Skyline HQ uses the original compact rooftop in Rooftop Knockout; other modes retain their larger layouts. On phones, the game starts with sharper graphics, adapts resolution if frames slow down, and requests fullscreen after the first tap when the browser permits it. Browsers do not permit fullscreen before a user gesture.
+The four playable characters are Mango, Puddles, Pickle and Bandit. The Boss and Modi ji characters have been removed. All game modes use their regular arena layouts. On phones, the game starts with sharper graphics, adapts resolution if frames slow down, and requests fullscreen after the first tap when the browser permits it. Browsers do not permit fullscreen before a user gesture.
 
 ## Validation
 

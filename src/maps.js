@@ -11,8 +11,6 @@ export const MAPS=[
 ];
 const PREVIEW={...MAPS[0],id:'preview',name:'The Original Rooftop',size:{x:21,z:15},spawns:[[-9,4],[9,-4],[-3,9],[3,-9]],obstacles:[...pod(-11,-7),...pod(11,7),prop('copier',-3,-5,2,1.8,1.8),prop('sofa',3,7,5,1.7,1.3),prop('desk',9,-7,3,1.8,1.5),prop('desk',-9,7,3,1.8,1.5)]};
 for(const map of [...MAPS,PREVIEW])for(const side of[-1,1])map.obstacles.push(prop('roofAccess',side*(map.size.x-7),side*(map.size.z-4),9,3,3.4));
-// The early, compact rooftop remains the Knockout layout on Skyline HQ.
-export const CLASSIC_ROOFTOP={...PREVIEW,id:'skyline',name:'Classic Rooftop',tag:'THE ORIGINAL · SMALL ROOF',obstacles:[...PREVIEW.obstacles]};
 for(const map of OFFICE_MAPS){
  const previous=MAPS.find(m=>m.id===map.surroundings);
  // Retain the established skyline, weather, light and traffic around each roof.
