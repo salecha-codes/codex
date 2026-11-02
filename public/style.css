@@ -107,3 +107,8 @@ body.boss-studio::after{display:none}#comeback-card.is-boss-studio{box-shadow:0 
  .home-copy .characters{margin-bottom:6px}.home-copy .character{padding:4px 0}
  .home-copy #play-btn{margin-top:0;padding:10px 14px}
 }
+
+@media (pointer:coarse) and (orientation:landscape) and (max-height:520px){
+ body.playing #topbar{left:auto;width:auto;right:max(14px,env(safe-area-inset-right,0px))}
+ body.playing #topbar .top-actions{margin-left:auto}
+}

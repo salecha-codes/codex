@@ -1,7 +1,7 @@
 # Office Chair Rumble
 
 A browser-based rooftop chair brawler: eight arenas, solo bots, shared-keyboard play,
-invite-only online rooms for up to four people, and The Boss character prototype.
+invite-only online rooms for up to four people, and five playable characters.
 No installation is required for players.
 
 ## Deploy on Vercel
@@ -80,10 +80,7 @@ Skyline Penthouse, Biophilic Oasis, Neo-Cyber Tech Arena, Vintage Industrial Lof
 and Urban Penthouse · Open Floor. The latter reserves an 82 × 54-unit open center.
 Existing maps, modes, controls and art are retained from the current game source.
 
-The Boss is the first new office-cast prototype: eight rendered directional views,
-four comeback poses, a live 3D chair, a face-detail preview and a playable rider.
-Open `/?character=boss&preview=boss` to inspect him. It is rendered character artwork,
-not a sculpted/rigged human mesh. The other five prior roster choices remain.
+The five playable characters are Mango, Puddles, Pickle, Bandit and Modi ji. The Boss prototype has been removed. On phones, the game starts with sharper graphics, adapts resolution if frames slow down, and requests fullscreen after the first tap when the browser permits it. Browsers do not permit fullscreen before a user gesture.
 
 ## Validation
 
@@ -93,7 +90,7 @@ npm test
 npm run build
 ```
 
-Tests cover physics, camera stability, all arenas/modes, the character prototype,
+Tests cover physics, camera stability, all arenas/modes, the five-character roster,
 room authorization, four-player limits, Vercel request adaptation, shared backend
 forwarding, and real Postgres execution using PGlite. GitHub Actions runs these
 checks on pushes and pull requests. A live Neon connection is optional and is not
