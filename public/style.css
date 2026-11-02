@@ -112,3 +112,12 @@ body.boss-studio::after{display:none}#comeback-card.is-boss-studio{box-shadow:0 
  body.playing #topbar{left:auto;width:auto;right:max(14px,env(safe-area-inset-right,0px))}
  body.playing #topbar .top-actions{margin-left:auto}
 }
+
+/* Compact phone timer beside Pause, leaving the center of the arena visible. */
+@media(pointer:coarse){
+ .match-clock{top:max(12px,env(safe-area-inset-top,0px));left:max(70px,calc(env(safe-area-inset-left,0px) + 58px));right:auto;transform:none;min-width:0;width:112px;padding:4px 7px;border-radius:9px;box-shadow:0 2px 0 #29394a33}
+ .match-clock>span{font-size:5px;line-height:1;letter-spacing:.65px;white-space:nowrap}
+ .match-clock strong{font-size:19px;line-height:1.05}
+ .match-map{top:57px;left:max(70px,calc(env(safe-area-inset-left,0px) + 58px));right:auto;transform:none;font-size:6px}
+}
+@media(pointer:coarse) and (orientation:landscape) and (max-height:520px){.match-clock{top:max(11px,env(safe-area-inset-top,0px))}.match-map{top:56px}}
