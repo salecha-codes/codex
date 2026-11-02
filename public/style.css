@@ -91,3 +91,19 @@ body.boss-studio::after{content:'';position:fixed;inset:0;z-index:14;background:
 @media(max-height:520px) and (orientation:landscape){#comeback-card.is-boss-studio{width:min(760px,calc(100vw - 24px));display:grid;grid-template-columns:1fr 1fr;max-height:calc(100vh - 16px)}#comeback-card.is-boss-studio header{grid-column:1/-1}#comeback-card.is-boss-studio #comeback-stage{height:calc(100vh - 90px)}#comeback-card.is-boss-studio footer{padding:9px 14px}.boss-rotate{margin:10px 0}#comeback-card.is-boss-studio #comeback-note{font-size:8px}}
 
 body.boss-studio::after{display:none}#comeback-card.is-boss-studio{box-shadow:0 18px 45px #0e1d2b66,0 0 0 100vmax #172835b8}
+
+/* Phone landscape: keep the lobby reachable and controls clear of cutouts. */
+@media(pointer:coarse) and (orientation:landscape) and (max-height:520px){
+ .home-copy{top:78px;max-height:calc(100dvh - 86px - env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;padding:4px 4px 8px 0;touch-action:pan-y}
+ #joystick{left:max(20px,env(safe-area-inset-left,0px));bottom:max(20px,env(safe-area-inset-bottom,0px))}
+ .touch-actions{right:max(20px,env(safe-area-inset-right,0px));bottom:max(20px,env(safe-area-inset-bottom,0px))}
+ body.playing #topbar{right:max(15px,env(safe-area-inset-right,0px))}
+ #network-status{right:max(12px,env(safe-area-inset-right,0px));bottom:max(4px,env(safe-area-inset-bottom,0px))}
+}
+@media(pointer:coarse) and (orientation:landscape) and (max-height:380px){
+ .home-copy{top:70px;max-height:calc(100dvh - 78px - env(safe-area-inset-bottom,0px))}
+ .home-copy h1{margin-bottom:8px}.home-copy h1>span{font-size:19px}.home-copy h1>strong{font-size:40px}
+ .home-copy .eyebrow,.home-copy .tagline,.home-copy .intro{display:none}
+ .home-copy .characters{margin-bottom:6px}.home-copy .character{padding:4px 0}
+ .home-copy #play-btn{margin-top:0;padding:10px 14px}
+}
