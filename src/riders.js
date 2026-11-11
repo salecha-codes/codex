@@ -1,7 +1,7 @@
 import * as T from 'three';
-import {CHARACTERS} from './simulation.js';
+import {CHARACTERS,characterIndex} from './simulation.js';
 import {box,ball,cyl,rod,torus,mesh,batchLocal} from './art.js';
-export function makeRider(character){const root=new T.Group(),rig=new T.Group(),chair=new T.Group();root.add(rig,chair);
+export function makeRider(character){character=characterIndex(character);const root=new T.Group(),rig=new T.Group(),chair=new T.Group();root.add(rig,chair);
  const color=CHARACTERS[character].color,dark='#35364f',skin=character===3?'#9d95ac':color;
  cyl(chair,.13,.17,.66,'#aab7be',0,.63,0,.8);const wheels=[];
  for(let i=0;i<5;i++){const a=i*Math.PI*2/5;rod(chair,[0,.31,0],[Math.sin(a)*.66,.21,Math.cos(a)*.66],.065,'#b6c0c8',.75);const wheel=new T.Group();wheel.position.set(Math.sin(a)*.7,.19,Math.cos(a)*.7);wheel.rotation.y=a;chair.add(wheel);const roll=new T.Group();wheel.add(roll);wheel.userData.roll=roll;const tire=cyl(roll,.13,.13,.14,'#303644');tire.rotation.z=Math.PI/2;wheels.push(wheel)}

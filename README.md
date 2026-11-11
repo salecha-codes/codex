@@ -71,7 +71,7 @@ the local server uses that configured backend instead.
 
 Desktop: WASD/arrows, Space to fire, Shift to boost, C to change camera. Phone:
 steering joystick and action buttons. Direct WebRTC connections are attempted;
-HTTP room relay remains available when a direct connection cannot be established or stops delivering updates. Online rounds wait until every joined player has rendered the arena, then use a shared three-second start deadline. Rematches repeat this readiness check. Deploy the frontend and room service together for readiness acknowledgments; all friends should reload after an update.
+HTTP room relay remains available when a direct connection cannot be established or stops delivering updates. Online rounds wait until every joined player has rendered the arena, then use a shared three-second start deadline. Rematches repeat this readiness check. A round that cannot finish loading within 60 seconds returns everyone to the lobby; abandoned sessions can rejoin. Presence uses server time, so device clock differences do not disable friends. Deploy the frontend and room service together for readiness acknowledgments; all friends should reload after an update.
 
 ## Arenas and characters
 

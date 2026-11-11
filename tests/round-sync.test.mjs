@@ -1,5 +1,5 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
-import {pendingPlayers,releaseRound,SnapshotOrder} from '../src/round-sync.js';
+import {pendingPlayers,releaseRound,SnapshotOrder,activeMembers} from '../src/round-sync.js';
 import {createMatch,cleanInput} from '../src/simulation.js';
 const roster=[{id:'h',slot:0,name:'Host'},{id:'g',slot:1,name:'Friend'}];
 function round(id='round-1'){return {...createMatch(),roundId:id,roundPhase:'loading'}}
@@ -7,3 +7,5 @@ test('host freezes the round until every current player rendered the same round'
 test('a rematch requires new readiness; a departed friend cannot hold the room',()=>{const s=round('round-2');assert.equal(releaseRound(s,roster,'round-2',{1:{readyRound:'round-1'}}),false);assert.equal(releaseRound(s,roster.slice(0,1),'round-2',{}),true)});
 test('ready acknowledgments survive relay input sanitization without unbounded strings',()=>{assert.equal(cleanInput({readyRound:'round-1'}).readyRound,'round-1');assert.equal(cleanInput({readyRound:'x'.repeat(81)}).readyRound,undefined)});
 test('a newer relay snapshot fills a silent direct channel and delayed packets cannot rewind time',()=>{const order=new SnapshotOrder(),snapshot=(tick,seq,roundId='a',roundEpoch=100)=>({tick,syncSequence:seq,roundId,roundEpoch});assert.equal(order.accept(snapshot(0,1)),true);assert.equal(order.accept(snapshot(0,2)),true);assert.equal(order.accept(snapshot(60,3)),true);assert.equal(order.accept(snapshot(30,2)),false);assert.equal(order.accept(snapshot(0,4,'b',200)),true);assert.equal(order.accept(snapshot(100,5)),false);assert.equal(order.accept(snapshot(0,1,'unseen-old',150)),false)});
+test('server-time presence remains correct with device clocks ahead or behind',()=>{const now=1700000000000;const roster=[{slot:0,lastSeen:now},{slot:1,lastSeen:now-1000},{slot:2,lastSeen:now-13000}];assert.deepEqual(activeMembers(roster,now).map(m=>m.slot),[0,1])});
+test('loading timeout cancels visibly instead of starting without a guest',()=>{const s=round();s.roundPreparedAt=100000;assert.equal(releaseRound(s,roster,'round-1',{},159999),false);assert.equal(s.roundPhase,'loading');assert.equal(releaseRound(s,roster,'round-1',{},160000),false);assert.equal(s.roundPhase,'cancelled');assert.match(s.roundCancelReason,/Friend/);assert.equal(s.tick,0)});

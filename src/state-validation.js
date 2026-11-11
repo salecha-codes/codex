@@ -18,8 +18,10 @@ export function validMatchState(s){
   if(e.type==='out'&&(!integer(e.attacker,-1,3)||!['rocket','fall'].includes(e.reason)))return false;
   if(['goal','objective-score'].includes(e.type)&&!integer(e.team,0,1))return false;
  }
+ if(s.roundPreparedAt!==undefined&&!number(s.roundPreparedAt,0,Number.MAX_SAFE_INTEGER))return false;
+ if(s.roundCancelReason!==undefined&&!text(s.roundCancelReason,160))return false;
  if(s.roundStartsAt!==undefined&&!number(s.roundStartsAt,0,Number.MAX_SAFE_INTEGER))return false;
- if(s.roundPhase!==undefined&&!['loading','playing'].includes(s.roundPhase))return false;
+ if(s.roundPhase!==undefined&&!['loading','playing','cancelled'].includes(s.roundPhase))return false;
  if(s.roundEpoch!==undefined&&!integer(s.roundEpoch,0,Number.MAX_SAFE_INTEGER))return false;
  if(s.syncSequence!==undefined&&!integer(s.syncSequence,0,Number.MAX_SAFE_INTEGER))return false;
  const o=s.objective;
