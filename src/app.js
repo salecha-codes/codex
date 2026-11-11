@@ -3,7 +3,7 @@ import {validMatchState,matchSnapshot} from './state-validation.js';
 import {inject} from '@vercel/analytics';
 
 // Count page views without sending invite codes or preview query parameters.
-if(!['localhost','127.0.0.1','[::1]'].includes(location.hostname))inject({mode:'production',beforeSend:event=>{const url=new URL(event.url);url.search='';url.hash='';if(url.pathname.startsWith('/c/'))url.pathname='/';return{...event,url:url.toString()}}});
+if(!location.hostname.endsWith('.chatgpt.site')&&!['localhost','127.0.0.1','[::1]'].includes(location.hostname))inject({mode:'production',beforeSend:event=>{const url=new URL(event.url);url.search='';url.hash='';if(url.pathname.startsWith('/c/'))url.pathname='/';return{...event,url:url.toString()}}});
 
 import {comebackBeat} from './comeback.js';
 import {captureFrame} from './rider-motion.js';
