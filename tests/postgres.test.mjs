@@ -7,7 +7,7 @@ test('Postgres SQL conversion preserves literals and binds values rather than in
  assert.equal(postgresSql("SELECT character, `room` FROM members WHERE name = ? AND signal = '?' -- ?\nAND room = ?"),"SELECT \"character\", \"room\" FROM members WHERE name = $1 AND signal = '?' -- ?\nAND room = $2");
  assert.equal(postgresSql("SELECT 'it''s ?' /* ? */ WHERE id=?"),"SELECT 'it''s ?' /* ? */ WHERE id=$1");
 });
-test('real Postgres engine stores and relays eight arenas, four characters, room capacity and all team objectives',async()=>{
+test('real Postgres engine stores and relays all arenas, four characters, room capacity and all team objectives',async()=>{
  const pg=new PGlite();await pg.waitReady;
  const executor={query:(sql,params)=>pg.query(sql,params),transaction:queries=>pg.transaction(async tx=>{const results=[];for(const q of queries)results.push(await tx.query(q.sql,q.params));return results})};
  const db=createRoomDatabase(executor),env={DB:db};

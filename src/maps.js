@@ -1,3 +1,4 @@
+import {BMSCE_MAP} from './bmsce-map.js';
 import {OFFICE_MAPS} from './office-maps.js';
 const prop=(type,x,z,w,d,h=2)=>({type,x,z,w,d,h});
 function pod(x,z){return[prop('partition',x,z,7,.5,2.1),prop('desk',x-3,z-3,3,1.8,1.5),prop('desk',x+3,z-3,3,1.8,1.5),prop('cabinet',x+5,z,1.5,1.4,1.9)]}
@@ -18,6 +19,6 @@ for(const map of OFFICE_MAPS){
  for(const key of ['skyTop','skyBottom','fog','sun','ambient','ground'])map.palette[key]=previous.palette[key];
  map.palette.lane=map.palette.floor;map.palette.edge=map.palette.accent;
 }
-MAPS.push(...OFFICE_MAPS);
+MAPS.push(...OFFICE_MAPS,BMSCE_MAP);
 export function getMap(id){if(id==='preview')return PREVIEW;return MAPS.find(m=>m.id===id)||MAPS[0]}
 export const DEFAULT_MAP=MAPS[0];

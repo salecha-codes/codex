@@ -16,7 +16,7 @@ try{
  await host.evaluate(()=>Object.defineProperty(document,'hidden',{configurable:true,get:()=>true}));
  const guest=await player();
  await host.evaluate(()=>{const realNow=Date.now.bind(Date);Date.now=()=>realNow()+60000});
- await host.click('#rooms-btn');await host.selectOption('#room-bots','0');await host.click('#create-room-btn');
+ await host.click('#rooms-btn');await host.selectOption('#room-map',process.env.GAME_MAP||'skyline');await host.selectOption('#room-bots','0');await host.click('#create-room-btn');
  await host.waitForFunction(()=>window.__chair.net.session);
  const code=await host.locator('#lobby-code').textContent();
  await guest.click('#rooms-btn');await guest.click('#room-join-tab');await guest.fill('#room-code',code);await guest.click('#join-room-btn');

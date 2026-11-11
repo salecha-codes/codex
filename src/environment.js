@@ -1,3 +1,4 @@
+import {buildCampusEnvironment} from './campus-environment.js';
 import {makeOfficeFurniture} from './office-furniture.js';
 import {furnitureMaterial,finishFurniture,contactShadowMaterial,addContactShadow,displayMaterial} from './furniture-surfaces.js';
 import {buildOfficeInterior} from './office-environment.js';
@@ -50,7 +51,7 @@ function city(root,map,animated){const district=new T.Group();root.add(district)
  for(let i=0;i<6;i++){const car=new T.Group();box(car,2,.65,1,night?'#d2a4cf':['#dec190','#90b0b0','#d49e8d'][i%3],0,.5,0,.09);box(car,1,.5,.85,'#637d8b',0,1,0,.07);lightBox(car,.12,.15,.7,'#ffedbd',1.02,.6,0);car.position.set(-100+i*35,-18,rz+18);animated.add(car);car.userData.traffic=true;car.userData.speed=3+i*.3;car.userData.lane=rz+18}
  root.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=false}});
 }
-export function buildEnvironment(map){if(map.interior)return buildOfficeInterior(map,city);const root=new T.Group(),props=new T.Group(),animated=new T.Group(),p=map.palette,{x:rx,z:rz}=map.size,w=rx*2,d=rz*2;root.add(animated);
+export function buildEnvironment(map){if(map.campus)return buildCampusEnvironment(map);if(map.interior)return buildOfficeInterior(map,city);const root=new T.Group(),props=new T.Group(),animated=new T.Group(),p=map.palette,{x:rx,z:rz}=map.size,w=rx*2,d=rz*2;root.add(animated);
  box(props,w,.65,d,p.wall,0,-.4,0,.04);box(props,w+.1,.15,d+.1,p.floor,0,-.04,0,.025);box(props,w,10,d,p.wall,0,-5.6,0,0);
  for(let i=-rx+2;i<rx;i+=2)box(props,.025,.014,d-.6,p.tile,i,.047,0,0);for(let i=-rz+2;i<rz;i+=2)box(props,w-.6,.014,.025,p.tile,0,.047,i,0);
  // A roof service route and office carpet islands frame the open fighting lanes.

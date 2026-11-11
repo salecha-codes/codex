@@ -1,6 +1,6 @@
 # Office Chair Rumble
 
-A browser-based rooftop chair brawler: eight arenas, solo bots, shared-keyboard play,
+A browser-based rooftop chair brawler: nine arenas, solo bots, shared-keyboard play,
 invite-only online rooms for up to four people, and four playable characters.
 No installation is required for players.
 
@@ -75,9 +75,9 @@ HTTP room relay remains available when a direct connection cannot be established
 
 ## Arenas and characters
 
-The eight arenas include Skyline HQ, Executive Terrace, Overtime Annex, Urban
+The nine arenas include Skyline HQ, Executive Terrace, Overtime Annex, Urban
 Skyline Penthouse, Biophilic Oasis, Neo-Cyber Tech Arena, Vintage Industrial Loft,
-and Urban Penthouse · Open Floor. The latter reserves an 82 × 54-unit open center.
+Urban Penthouse · Open Floor, and BMSCE · Bengaluru Campus. The Open Floor map reserves an 82 × 54-unit open center.
 Existing maps, modes, controls and art are retained from the current game source.
 
 The four playable characters are Mango, Puddles, Pickle and Bandit. The Boss and Modi ji characters have been removed. Team modes adapt obstacles to keep their objectives accessible. The game starts in Performance quality and adapts resolution if frames slow down, and requests fullscreen after the first tap when the browser permits it. Browsers do not permit fullscreen before a user gesture.
@@ -108,3 +108,5 @@ needed for tests or the default deployment.
 
 Vercel publishing requires access to your own Vercel account. This repository is
 ready to import; a successful GitHub push alone is not a Vercel deployment.
+
+The BMSCE map is an original playable interpretation of the Basavanagudi campus, with a Platinum Jubilee Block-inspired facade, academic wings, entrance gate and landscaped courtyard. Its buildings use batched Three.js geometry and shared materials; no external model downloads are needed during play. Reference: https://www.bmsce.ac.in/ .
