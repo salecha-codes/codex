@@ -1,7 +1,7 @@
 # Office Chair Rumble
 
 A browser-based rooftop chair brawler: eight arenas, solo bots, shared-keyboard play,
-invite-only online rooms for up to four people, and five playable characters.
+invite-only online rooms for up to four people, and four playable characters.
 No installation is required for players.
 
 ## Deploy on Vercel
@@ -71,7 +71,7 @@ the local server uses that configured backend instead.
 
 Desktop: WASD/arrows, Space to fire, Shift to boost, C to change camera. Phone:
 steering joystick and action buttons. Direct WebRTC connections are attempted;
-HTTP room relay remains available when a direct connection cannot be established.
+HTTP room relay remains available when a direct connection cannot be established or stops delivering updates. Online rounds wait until every joined player has rendered the arena, then use a shared three-second start deadline. Rematches repeat this readiness check. Deploy the frontend and room service together for readiness acknowledgments; all friends should reload after an update.
 
 ## Arenas and characters
 
@@ -80,7 +80,7 @@ Skyline Penthouse, Biophilic Oasis, Neo-Cyber Tech Arena, Vintage Industrial Lof
 and Urban Penthouse · Open Floor. The latter reserves an 82 × 54-unit open center.
 Existing maps, modes, controls and art are retained from the current game source.
 
-The four playable characters are Mango, Puddles, Pickle and Bandit. The Boss and Modi ji characters have been removed. All game modes use their regular arena layouts. On phones, the game starts with sharper graphics, adapts resolution if frames slow down, and requests fullscreen after the first tap when the browser permits it. Browsers do not permit fullscreen before a user gesture.
+The four playable characters are Mango, Puddles, Pickle and Bandit. The Boss and Modi ji characters have been removed. Team modes adapt obstacles to keep their objectives accessible. The game starts in Performance quality and adapts resolution if frames slow down, and requests fullscreen after the first tap when the browser permits it. Browsers do not permit fullscreen before a user gesture.
 
 ## Validation
 
@@ -90,7 +90,7 @@ npm test
 npm run build
 ```
 
-Tests cover physics, camera stability, all arenas/modes, the five-character roster,
+Tests cover physics, camera stability, all arenas/modes, the four-character roster,
 room authorization, four-player limits, Vercel request adaptation, shared backend
 forwarding, and real Postgres execution using PGlite. GitHub Actions runs these
 checks on pushes and pull requests. A live Neon connection is optional and is not

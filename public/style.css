@@ -121,3 +121,9 @@ body.boss-studio::after{display:none}#comeback-card.is-boss-studio{box-shadow:0 
  .match-map{top:57px;left:max(70px,calc(env(safe-area-inset-left,0px) + 58px));right:auto;transform:none;font-size:6px}
 }
 @media(pointer:coarse) and (orientation:landscape) and (max-height:520px){.match-clock{top:max(11px,env(safe-area-inset-top,0px))}.match-map{top:56px}}
+
+#local-btn { margin-top: 10px; }
+@media (pointer: coarse) { #local-btn { display: none; } }
+@media (max-width: 700px) {
+ body:has(#mode-onboarding:not([hidden])) #health-card { visibility: hidden; }
+}

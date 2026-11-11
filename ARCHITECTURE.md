@@ -35,3 +35,7 @@ Local development injects a SQLite-backed implementation of the same storage
 interface. Postgres conformance tests run the real SQL in PGlite, not an SQL-string
 mock. The Vercel request tests exercise actual host/guest APIs through the shared
 forwarding layer using a local database service.
+
+## Round synchronization
+
+The host publishes a frozen loading snapshot before each round. Guests acknowledge the round ID only after their first arena render, using sanitized input metadata over both direct and relay paths. Once all current room members acknowledge, the host announces a shared start deadline using its estimate of server time. Guests use the same deadline for their countdown; only the host advances gameplay. Direct and relay snapshots share sequence and round ordering, so a silent open data channel does not suppress HTTP recovery, and delayed snapshots cannot restore an earlier round. Deploy this room service alongside the frontend; older room services do not preserve readiness metadata.

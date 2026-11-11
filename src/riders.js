@@ -22,7 +22,7 @@ export function makeRider(character){const root=new T.Group(),rig=new T.Group(),
  const launcher=new T.Group();launcher.position.set(.43,1.64,.59);rig.add(launcher);box(launcher,.4,.32,.5,'#e86d48',0,0,0,.08);cyl(launcher,.14,.15,.12,'#263542',.2,0,-.04).rotation.z=Math.PI/2;const barrel=cyl(launcher,.21,.23,.4,'#34444e',0,0,.36,.3);barrel.rotation.x=Math.PI/2;torus(launcher,.21,.035,'#ffc84f',0,0,.58);box(launcher,.18,.11,.25,'#27343d',0,.22,-.02,.03);
  const ring=new T.Mesh(new T.RingGeometry(.75,.82,40),new T.MeshBasicMaterial({color,transparent:true,opacity:.65,side:T.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=.075;root.add(ring);
  const shadow=new T.Mesh(new T.CircleGeometry(.72,24),new T.MeshBasicMaterial({color:'#3a4350',transparent:true,opacity:.12,depthWrite:false}));shadow.rotation.x=-Math.PI/2;shadow.position.y=.066;root.add(shadow);
- batchLocal(chair,wheels);batchLocal(head,eyes);batchLocal(tail);batchLocal(launcher);batchLocal(rig,[chair,head,tail,launcher]);
+ batchLocal(chair,wheels,true);batchLocal(head,eyes,true);batchLocal(tail,[],true);batchLocal(launcher,[],true);batchLocal(rig,[chair,head,tail,launcher],true);
  const muzzle=new T.Mesh(new T.OctahedronGeometry(.25),new T.MeshBasicMaterial({color:'#ffda75'}));muzzle.position.z=.82;muzzle.visible=false;launcher.add(muzzle);const stars=new T.Group();stars.position.y=3.25;for(let j=0;j<3;j++){const star=new T.Mesh(new T.OctahedronGeometry(.12),new T.MeshBasicMaterial({color:'#ffce62'}));star.position.set(Math.sin(j*2.094)*.65,0,Math.cos(j*2.094)*.65);stars.add(star)}root.add(stars);stars.visible=false;return{root,rig,chair,head,eyes,wheels,tail,launcher,muzzle,stars,ring,shadow,character};
 }
 

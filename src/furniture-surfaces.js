@@ -6,7 +6,7 @@ const materials=new Map(),geometries=new Map(),textures=new Map();let reflection
 export function setFurnitureReflection(texture){reflection=texture;for(const m of materials.values()){m.envMap=texture;m.needsUpdate=true}}
 function maps(kind){
  if(textures.has(kind))return textures.get(kind);
- const size=256,height=new Float32Array(size*size),rgb=new Uint8Array(size*size*4),normal=new Uint8Array(size*size*4),rough=new Uint8Array(size*size*4);
+ const size=128,height=new Float32Array(size*size),rgb=new Uint8Array(size*size*4),normal=new Uint8Array(size*size*4),rough=new Uint8Array(size*size*4);
  let seed=371;const random=()=>((seed=(Math.imul(1664525,seed)+1013904223)>>>0)/4294967296);
  for(let y=0;y<size;y++)for(let x=0;x<size;x++){
   const i=y*size+x,n=random();let h=.5;
@@ -42,7 +42,7 @@ export function furnitureMaterial(kind,color='#ffffff'){
  m.userData.furniture=true;m.userData.surface=kind;materials.set(key,m);return m;
 }
 export function furnitureBox(parent,w,h,d,color,x=0,y=0,z=0,r=.06,metal=0){
- const radius=Math.min(r,w/3,h/3,d/3),segments=radius>.065?3:radius>.025?2:1,key=[w,h,d,radius,segments].join(':');
+ const radius=Math.min(r,w/3,h/3,d/3),segments=1,key=[w,h,d,radius,segments].join(':');
  if(!geometries.has(key)){
   const g=radius<.012?new T.BoxGeometry(w,h,d):new RoundedBoxGeometry(w,h,d,segments,radius);
   // World-sized UVs keep fabric and grain consistent between a cushion and a long desk.

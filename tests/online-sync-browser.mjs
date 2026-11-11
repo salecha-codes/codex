@@ -1,0 +1,51 @@
+import {chromium} from 'playwright';
+import assert from 'node:assert/strict';
+const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader','--disable-dev-shm-usage','--disable-background-timer-throttling']});
+const errors=[];
+async function player(){
+ const ctx=await browser.newContext({viewport:{width:600,height:450}});
+ await ctx.addInitScript(()=>{window.RTCPeerConnection=undefined;localStorage.setItem('chair-preferences',JSON.stringify({sound:false,quality:'performance',character:0}))});
+ const page=await ctx.newPage();page.setDefaultTimeout(90000);page.on('pageerror',e=>errors.push(e.message));
+ await page.goto((process.env.GAME_URL||'http://127.0.0.1:3070')+'/?qa=1',{waitUntil:'domcontentloaded'});
+ await page.waitForFunction(()=>window.__chair,null,{timeout:90000});
+ await page.evaluate(()=>{window.__chair.world.renderer.setPixelRatio(.5);window.__chair.world.resize()});return page;
+}
+try{
+ const host=await player();
+ // Keep the host's animated menu off while the second software renderer loads.
+ await host.evaluate(()=>Object.defineProperty(document,'hidden',{configurable:true,get:()=>true}));
+ const guest=await player();
+ await host.click('#rooms-btn');await host.selectOption('#room-bots','0');await host.click('#create-room-btn');
+ await host.waitForFunction(()=>window.__chair.net.session);
+ const code=await host.locator('#lobby-code').textContent();
+ await guest.click('#rooms-btn');await guest.click('#room-join-tab');await guest.fill('#room-code',code);await guest.click('#join-room-btn');
+ await guest.waitForFunction(()=>window.__chair.net.session);await host.waitForFunction(()=>window.__chair.net.roster.length===2);
+ await guest.evaluate(()=>{const net=window.__chair.net;window.releaseReady=net.markReady.bind(net);net.markReady=()=>{}});
+ await host.evaluate(()=>Object.defineProperty(document,'hidden',{configurable:true,get:()=>false}));
+ await host.click('#start-room-btn');await guest.waitForFunction(()=>window.__chair.mode==='online');
+ await host.evaluate(()=>Object.defineProperty(document,'hidden',{configurable:true,get:()=>true}));
+ await guest.waitForTimeout(4000);
+ assert.deepEqual(await host.evaluate(()=>({phase:window.__chair.state.roundPhase,tick:window.__chair.state.tick,time:window.__chair.state.time})),{phase:'loading',tick:0,time:180});
+ console.log('PASS slow guest holds host at tick zero beyond the old countdown');
+ await guest.evaluate(()=>{const net=window.__chair.net;net.markReady=window.releaseReady;net.markReady(window.__chair.state.roundId)});
+ await guest.waitForFunction(()=>window.__chair.state.roundPhase==='playing');
+ const deadline=await host.evaluate(()=>window.__chair.state.roundStartsAt);assert.equal(await guest.evaluate(()=>window.__chair.state.roundStartsAt),deadline);
+ await guest.waitForFunction(()=>window.__chair.state.tick>30);
+ assert.equal(await guest.evaluate(()=>window.__chair.state.roundId),await host.evaluate(()=>window.__chair.state.roundId));
+ console.log('PASS common start deadline and match over HTTP relay without WebRTC');
+ const old=await guest.evaluate(()=>structuredClone(window.__chair.state));
+ await host.evaluate(()=>{window.__chair.state.time=.001});
+ await guest.waitForFunction(()=>document.querySelector('#results-dialog').open);
+ await host.evaluate(()=>Object.defineProperty(document,'hidden',{configurable:true,get:()=>false}));
+ await host.waitForFunction(()=>document.querySelector('#results-dialog').open);
+ await guest.evaluate(()=>{window.__chair.net.markReady=()=>{}});
+ await host.click('#rematch-btn');await host.waitForFunction(id=>window.__chair.state.roundId!==id,old.roundId);await guest.waitForFunction(id=>window.__chair.state.roundId!==id,old.roundId);
+ await host.evaluate(()=>Object.defineProperty(document,'hidden',{configurable:true,get:()=>true}));
+ await guest.waitForTimeout(1500);assert.equal(await host.evaluate(()=>window.__chair.state.tick),0);
+ await guest.evaluate(previous=>window.__chair.net.receiveState(previous),old);
+ assert.notEqual(await guest.evaluate(()=>window.__chair.state.roundId),old.roundId);
+ await guest.evaluate(()=>{const net=window.__chair.net;net.markReady=window.releaseReady;net.markReady(window.__chair.state.roundId)});
+ await guest.waitForFunction(()=>window.__chair.state.tick>10);
+ assert.deepEqual(errors,[]);console.log('PASS rematch readiness and delayed old-round rejection');
+ await guest.evaluate(()=>window.__chair.net.leave());await host.evaluate(()=>window.__chair.net.leave());
+}finally{await browser.close()}

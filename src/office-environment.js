@@ -134,7 +134,7 @@ export function buildOfficeInterior(map,buildPreviousCity){
  // Thin hazard paint only. No walls, glass partitions, rails or invisible edge barriers.
  for(let x=-rx+.5;x<rx;x++)for(const z of[-rz+.15,rz-.15])box(solid,.95,.025,.3,Math.floor(x+rx)%2?p.edge:'#63757b',x,.075,z,0);
  for(let z=-rz+.5;z<rz;z++)for(const x of[-rx+.15,rx-.15])box(solid,.3,.025,.95,Math.floor(z+rz)%2?p.edge:'#63757b',x,.075,z,0);
- root.add(staticBatch(solid));
+ root.add(staticBatch(solid,true));
  if(map.exteriorGlazing){exterior.push(...buildPenthouseGlazing(map,owned));for(const wall of exterior)root.add(wall.group)}
  const viewDirection=new T.Vector3();
  const sky=document.createElement('canvas');sky.width=2;sky.height=256;

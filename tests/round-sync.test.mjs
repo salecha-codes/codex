@@ -1,0 +1,9 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {pendingPlayers,releaseRound,SnapshotOrder} from '../src/round-sync.js';
+import {createMatch,cleanInput} from '../src/simulation.js';
+const roster=[{id:'h',slot:0,name:'Host'},{id:'g',slot:1,name:'Friend'}];
+function round(id='round-1'){return {...createMatch(),roundId:id,roundPhase:'loading'}}
+test('host freezes the round until every current player rendered the same round',()=>{const s=round();assert.equal(releaseRound(s,roster,'round-1',{}),false);assert.equal(s.countdown,3);assert.equal(s.tick,0);assert.deepEqual(pendingPlayers(s,roster,'round-1',{}).map(m=>m.slot),[1]);assert.equal(releaseRound(s,roster,'round-1',{1:{readyRound:'older-round'}}),false);assert.equal(releaseRound(s,roster,'round-1',{1:{readyRound:'round-1'}}),true);assert.equal(s.roundPhase,'playing')});
+test('a rematch requires new readiness; a departed friend cannot hold the room',()=>{const s=round('round-2');assert.equal(releaseRound(s,roster,'round-2',{1:{readyRound:'round-1'}}),false);assert.equal(releaseRound(s,roster.slice(0,1),'round-2',{}),true)});
+test('ready acknowledgments survive relay input sanitization without unbounded strings',()=>{assert.equal(cleanInput({readyRound:'round-1'}).readyRound,'round-1');assert.equal(cleanInput({readyRound:'x'.repeat(81)}).readyRound,undefined)});
+test('a newer relay snapshot fills a silent direct channel and delayed packets cannot rewind time',()=>{const order=new SnapshotOrder(),snapshot=(tick,seq,roundId='a',roundEpoch=100)=>({tick,syncSequence:seq,roundId,roundEpoch});assert.equal(order.accept(snapshot(0,1)),true);assert.equal(order.accept(snapshot(0,2)),true);assert.equal(order.accept(snapshot(60,3)),true);assert.equal(order.accept(snapshot(30,2)),false);assert.equal(order.accept(snapshot(0,4,'b',200)),true);assert.equal(order.accept(snapshot(100,5)),false);assert.equal(order.accept(snapshot(0,1,'unseen-old',150)),false)});
